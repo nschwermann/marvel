@@ -1,48 +1,37 @@
 package net.schwiz.marvel.core
 
 import androidx.lifecycle.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-@UseExperimental(ExperimentalCoroutinesApi::class, FlowPreview::class)
 abstract class BaseViewModel<E : UIEvent, S : UIState, A : Action, R : Result> : ViewModel() {
 
-    private val internalEvents = ConflatedBroadcastChannel<E>()
-//    private val internalState = MediatorLiveData<S>()
-
     val state : LiveData<S> = liveData {
-        /**
-         * results.collect{
-         *    emit(latestValue + it)
-         * }
-         */
+        emit(makeInitState())
+        actions.actionTransform().collect {
+            emit(latestValue ?: makeInitState() + it)
+        }
     }
 
-    val actions : Flow<A>
-    val events = internalEvents.asFlow()
+    private val events = ConflatedBroadcastChannel<E>()
 
-    init {
-        actions = internalEvents.asFlow().eventTransform()
-    }
-
-    abstract fun Flow<E>.eventTransform() : Flow<A>
-    abstract fun Flow<S>.stateTransform(results : Flow<R>) : Flow<S>
-//    abstract fun Flow<R>
-
-    fun dispatch(event : E){
-        internalEvents.offer(event)
-    }
+    protected val actions : Flow<A> = events.asFlow().eventTransform()
+    protected abstract fun makeInitState() : S
+    protected abstract fun Flow<E>.eventTransform() : Flow<A>
+    protected abstract fun Flow<A>.actionTransform() : Flow<R>
+    protected abstract operator fun S.plus(next : R) : S
 
     fun acceptEvents(stream : Flow<E>){
         viewModelScope.launch {
             stream.collect{
-                internalEvents.offer(it)
+                events.offer(it)
             }
         }
+    }
+
+    fun dispatchEvent(event : E){
+        events.offer(event)
     }
 
 }

@@ -1,3 +1,5 @@
+package net.schwiz.marvel
+
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

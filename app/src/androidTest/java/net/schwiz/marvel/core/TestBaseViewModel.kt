@@ -1,14 +1,13 @@
 package net.schwiz.marvel.core
 
-import TestCoroutineRule
+import net.schwiz.marvel.TestCoroutineRule
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.asFlow
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import org.junit.runner.RunWith
-import net.schwiz.marvel.core.TestEvents.*
-import net.schwiz.marvel.core.TestActions.*
+import net.schwiz.marvel.observeForTesting
 import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -25,21 +24,66 @@ class TestBaseViewModel {
 
     private val model = TestModel()
 
-    private val testEvents = listOf(Event1, Event1, Event2)
-    private val testActions = listOf(Test1, Test1, Test2)
+    @Test
+    fun testEventFlowTransform(){
 
+        model.acceptEvents(TestModel.testEvents.asFlow())
+        with(testCoroutineRule){
+            runBlockingTest{
+                //shouldn't need asyncTest call here but... https://github.com/Kotlin/kotlinx.coroutines/issues/1204
+                asyncTest {
+                    assertEquals(TestModel.testActions, model.actionsAsList())
+                }
+            }
+        }
+
+        with(testCoroutineRule){
+            runBlockingTest{
+                asyncTest {
+                    assertEquals(emptyList(), model.actionsAsList(), "Reconnection received previous events")
+                }
+            }
+        }
+    }
 
     @Test
-    fun testEventTransform(){
-        val list = testCoroutineRule.asyncTest {
-            model.actions.take(testEvents.size).toList()
+    fun testResultFlowTransform(){
+        val useCase = TestUseCase()
+        with(testCoroutineRule){
+            runBlockingTest {
+                asyncTest {
+                    assertEquals(TestModel.testResults,
+                        useCase.transformActions(TestModel.testActions.asFlow()).toList())
+                }
+            }
         }
-        model.acceptEvents(testEvents.asFlow())
+    }
 
-        testCoroutineRule.runBlockingTest {
-            list.await().let {
-                println(it)
-                assertEquals(testActions, it)
+    @Test
+    fun testStateFlowTransform(){
+        model.state.observeForTesting {
+            with(testCoroutineRule){
+                runBlockingTest {
+                    asyncTest{
+                        assertEquals(TestModel.expectedStates, model.state.asFlow().toList())
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    fun testIndividualEvents(){
+        model.state.observeForTesting {
+            with(testCoroutineRule){
+                runBlockingTest{
+                    asyncTest {
+                        TestModel.testEvents.forEach {
+                            model.dispatchEvent(it)
+                        }
+                        assertEquals(TestModel.expectedStates, model.state.asFlow().toList())
+                    }
+                }
             }
         }
     }

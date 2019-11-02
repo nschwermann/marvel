@@ -24,9 +24,6 @@ interface Action
 interface Result
 interface UIState
 
-abstract class UseCase<A : Action, R : Result>(actions : Flow<A>){
-
-
-//    fun Flow<A>.transformActions() : Flow<R> = transformLatest { TODO() }
-    abstract fun Flow<A>.transformActions() : Flow<R>
+abstract class UseCase<A : Action, R : Result>(){
+    abstract fun transformActions(actions : Flow<A>) : Flow<R>
 }

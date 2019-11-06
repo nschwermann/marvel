@@ -4,14 +4,15 @@ import androidx.lifecycle.*
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.koin.core.KoinComponent
 
-abstract class BaseViewModel<E : UIEvent, S : UIState, A : Action, R : Result> : ViewModel() {
+abstract class BaseViewModel<E : UIEvent, S : UIState, A : Action, R : Result> : ViewModel(), KoinComponent {
 
     val state : LiveData<S> = liveData {
         emit(makeInitState())
-        actions.actionTransform().collect {
+        actions.actionTransform().onEach {
             emit(latestValue ?: makeInitState() + it)
-        }
+        }.launchIn(viewModelScope)
     }
 
     private val events = ConflatedBroadcastChannel<E>()

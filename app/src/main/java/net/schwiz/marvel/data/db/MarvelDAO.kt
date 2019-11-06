@@ -33,11 +33,11 @@ interface MarvelDAO {
     @Query("SELECT * FROM Character ORDER BY name")
     fun getCharacters() : DataSource.Factory<Int, Character>
 
-    @Query("SELECT * FROM character WHERE character_id = :charId")
-    fun getCharacter(charId : Int) : Flow<List<Character>>
-
     @Query("SELECT * FROM Character WHERE name LIKE :query")
-    fun getCharacter(query: String) : Flow<List<Character>>
+    fun getCharacter(query: String) : DataSource.Factory<Int, Character>
+
+    @Query("SELECT * FROM character WHERE character_id = :charId LIMIT 1")
+    fun getCharacter(charId : Int) : Flow<List<Character>>
 
     @Transaction
     @Query("SELECT * FROM Character WHERE character_id = :charId")

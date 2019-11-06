@@ -25,12 +25,12 @@ android {
         versionCode 1
         versionName "1.0"
 
-        javaCompileOptions{
+        javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [
-                        "room.schemaLocation":"$projectDir/schemas".toString(),
-                        "room.incremental":"true",
-                        "room.expandProjection":"true"]
+                        "room.schemaLocation"  : "$projectDir/schemas".toString(),
+                        "room.incremental"     : "true",
+                        "room.expandProjection": "true"]
             }
         }
 
@@ -66,25 +66,27 @@ android {
 dependencies {
     def room_version = "2.2.1"
     def recyclerview_version = "1.0.0"
+    def nav_version = "2.1.0"
     def paging_version = "2.1.0"
     def retrofit_version = "2.6.2"
     def koin_version = "2.0.1"
-    def kotlin_test_version = "3.5.0"
+    def arrow_version = "0.10.2"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     //Utils
+    implementation 'androidx.core:core-ktx:1.1.0'
     implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation "io.arrow-kt:arrow-core:$arrow_version"
+    implementation "io.arrow-kt:arrow-fx:$arrow_version"
 
     //kotlin
-    implementation  "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.13.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutine_version"
 
-    //android ktx
-    implementation 'androidx.core:core-ktx:1.1.0'
     //coroutine ext
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-rc01"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-rc01"
@@ -95,11 +97,17 @@ dependencies {
     implementation 'androidx.ui:ui-layout:0.1.0-dev02'
     implementation 'androidx.ui:ui-material:0.1.0-dev02'
     implementation 'androidx.ui:ui-tooling:0.1.0-dev02'
+    implementation "androidx.constraintlayout:constraintlayout:2.0.0-beta3"
     implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation "io.coil-kt:coil:0.8.0"
 
     //Data
     implementation "androidx.room:room-runtime:$room_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.4.0'

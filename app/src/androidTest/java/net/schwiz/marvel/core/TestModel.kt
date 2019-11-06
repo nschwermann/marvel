@@ -1,6 +1,10 @@
 package net.schwiz.marvel.core
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 sealed class TestEvents : UIEvent {
     object Event1 : TestEvents()
@@ -9,6 +13,7 @@ sealed class TestEvents : UIEvent {
 sealed class TestActions: Action {
     object Test1 : TestActions()
     object Test2 : TestActions()
+    object Test3 : TestActions()
 }
 data class TestState(val data : String) : UIState
 
@@ -62,22 +67,29 @@ class TestModel : BaseViewModel<TestEvents, TestState, TestActions, TestResults>
         }
     }
 
-    suspend fun actionsAsList() = actions.toList()
+    suspend fun actionsAsList() = actions.take(testActions.size).toList()
 }
 
 class TestUseCase : UseCase<TestActions, TestResults>(){
     override fun transformActions(actions : Flow<TestActions>): Flow<TestResults> {
-        return flow {
-            var incrementer = 0
+
+        return channelFlow {
+            println("channelFlowScope $this")
+            var incrementer = 1
             actions.collect {
-                emit(
                     when(it){
                         is TestActions.Test1 -> {
-                            TestResults.Success(incrementer++.toString())
+                            send(TestResults.Success(incrementer++.toString()))
                         }
-                        is TestActions.Test2 -> TestResults.Fail
+                        is TestActions.Test2 -> send(TestResults.Fail)
+                        is TestActions.Test3 -> {
+                            launch {
+                                println("launchScope $this")
+                                delay(5000)
+                                send(TestResults.Fail)
+                            }
+                        }
                     }
-                )
             }
         }
     }

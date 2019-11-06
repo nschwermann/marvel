@@ -1,6 +1,7 @@
 package net.schwiz.marvel.core
 
 import kotlinx.coroutines.flow.Flow
+import org.koin.core.KoinComponent
 
 /**
  *
@@ -24,6 +25,6 @@ interface Action
 interface Result
 interface UIState
 
-abstract class UseCase<A : Action, R : Result>(){
+abstract class UseCase<A : Action, R : Result> : KoinComponent {
     abstract fun transformActions(actions : Flow<A>) : Flow<R>
 }

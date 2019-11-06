@@ -59,7 +59,6 @@ fun <T> LiveData<T>.getOrAwaitValue(
     return data as T
 }
 
-
 /**
  * Observes a [LiveData] until the `block` is done executing.
  */

@@ -1,9 +1,6 @@
 package net.schwiz.marvel
 
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.async
+import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
 import org.junit.rules.TestRule
 import org.junit.runner.Description
@@ -31,6 +28,8 @@ class TestCoroutineRule : TestRule {
         testCoroutineScope.runBlockingTest { block() }
 
     fun <T>asyncTest(block : suspend TestCoroutineScope.() -> T) : Deferred<T>{
+        testCoroutineScope.launch {  }
         return testCoroutineScope.async { block(testCoroutineScope) }
     }
+
 }

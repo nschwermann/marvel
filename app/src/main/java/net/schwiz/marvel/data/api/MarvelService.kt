@@ -6,7 +6,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import retrofit2.http.QueryName
 
 interface MarvelService {
 
@@ -16,8 +15,8 @@ interface MarvelService {
 
     @GET("characters?orderBy=name")
     suspend fun characters(
-        @QueryName limit : Int,
-        @QueryName offset : Int,
+        @Query(value = "ldimit") limit : Int,
+        @Query(value = "offset") offset : Int,
         @Query(value ="nameStartsWith", encoded = true) name : String? = null) : Response<Result<Character>>
 
     @GET("characters/{id}")
@@ -25,6 +24,6 @@ interface MarvelService {
 
     @GET("characters/{id}/comics?orderBy=title")
     suspend fun getCharacterComics(@Path(value="id") id : Int,
-                                   @QueryName limit : Int,
-                                   @QueryName offest : Int) : Response<Result<Comic>>
+                                   @Query(value = "limit") limit : Int,
+                                   @Query(value = "offset") offset : Int) : Response<Result<Comic>>
 }

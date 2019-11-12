@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string translatable="false" name="full_detail">detail</string>
+
+    <string translatable="false" name="square_largest">standard_fantastic</string>
+
+    <string translatable="false" name="landscape_largest">landscape_incredible</string>
+
+    <string translatable="false" name="portrait_largest">portrait_uncanny</string>
+</resources>

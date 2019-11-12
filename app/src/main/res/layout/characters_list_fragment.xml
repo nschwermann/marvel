@@ -5,9 +5,13 @@
     android:layout_height="match_parent"
     tools:context=".ui.characters_list.CharactersListFragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        tools:itemCount="10"
+        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        tools:listitem="@layout/character_list_item"
+        tools:spanCount="2" />
 
 </FrameLayout>

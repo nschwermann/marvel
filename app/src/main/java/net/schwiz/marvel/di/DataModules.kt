@@ -30,7 +30,9 @@ val dataModule = module {
         Retrofit.Builder()
             .baseUrl(MarvelService.END_POINT)
             .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            .client(get())
             .build()
+            .create(MarvelService::class.java)
     }
 
     single {
@@ -38,6 +40,7 @@ val dataModule = module {
             AuthInterceptor(getProperty("private.key"))
         }catch(e : MissingPropertyException){
             Timber.e("You need an assets/koin.properties file containing private.key")
+            throw e
         }
     }
 
@@ -51,6 +54,7 @@ val dataModule = module {
         OkHttpClient.Builder()
             .addInterceptor(get<AuthInterceptor>())
             .addInterceptor(get<HttpLoggingInterceptor>())
+            .build()
     }
 
     single{

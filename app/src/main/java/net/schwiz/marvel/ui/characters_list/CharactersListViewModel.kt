@@ -1,5 +1,6 @@
 package net.schwiz.marvel.ui.characters_list
 
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import net.schwiz.marvel.core.BaseViewModel
@@ -7,10 +8,11 @@ import net.schwiz.marvel.domain.CharacterListActions
 import net.schwiz.marvel.domain.CharacterListResults
 import net.schwiz.marvel.domain.FetchCharactersUseCase
 import org.koin.core.inject
+import org.koin.core.parameter.parametersOf
 
 class CharactersListViewModel : BaseViewModel<CharacterListEvents, CharacterListViewState, CharacterListActions, CharacterListResults>() {
 
-    private val useCase : FetchCharactersUseCase by inject()
+    private val useCase : FetchCharactersUseCase by inject{parametersOf(viewModelScope)}
 
     override fun makeInitState(): CharacterListViewState = CharacterListViewState()
 

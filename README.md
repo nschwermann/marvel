@@ -13,15 +13,25 @@ My playground to learn cutting edge libraries and tools using the [Marvel API](h
  * Uses many [Jetpack Components](https://developer.android.com/jetpack): Data Binding, LiveData, Navigation, Paging, Room, ViewModel (to name a few).
  * Uses [Koin](https://github.com/InsertKoinIO/koin) for dependency injection.
  * Uses [Λrrow](https://github.com/arrow-kt/arrow) for functional types.
- * Built on [MVI Architecture](https://proandroiddev.com/writing-reactive-apps-with-mvi-f7de70739d59)
-
+ * Uses [Coil](https://github.com/coil-kt/coil) for image loading.
+ * Built with [MVI Architecture](https://proandroiddev.com/writing-reactive-apps-with-mvi-f7de70739d59)
  <!-- 
-  * Uses [Coil](https://github.com/coil-kt/coil) for image loading.
+ 
   * Uses Mockk(https://github.com/mockk/mockk) for testing.
  -->
 
 ### Highlights
  * Many to Many relation with Room
+ * MVI built with Coroutines
+ 
+#### Other MVI Examples 
+* [Orbit](https://medium.com/babylon-engineering/introducing-orbit-mvi-for-kotlin-and-android-62491f4e3234) - [github](https://github.com/babylonhealth/orbit-mvi)
+*  Roxie - [github](https://github.com/ww-tech/roxie)
+* [Uniflow](https://blog.kotlin-academy.com/making-android-unidirectional-data-flow-with-kotlin-coroutines-d69966717b6e) - [github](https://github.com/arnaudgiuliani/uniflow-kt)
+* [Managing State with RxJava by Jake Wharton](https://www.youtube.com/watch?v=0IKHxjkgop4) 
+
+#### Resources
+['Loading' Images Attribution](https://www.freevector.com/heroes-vectors#)
  
 ## License
 

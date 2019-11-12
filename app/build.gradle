@@ -8,6 +8,17 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
 
+    dataBinding{
+        enabled = true
+    }
+
+    viewBinding {
+        enabled = true
+    }
+//    buildFeatures {
+//        compose true
+//    }
+
     sourceSets {
         String sharedTestDir = 'src/sharedTest/java'
         test {
@@ -43,10 +54,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
-//    buildFeatures {
-//        compose true
-//    }
 
 // To inline the bytecode built with JVM target 1.8 into
 // bytecode that is being built with JVM target 1.6. (e.g. navArgs)
@@ -88,9 +95,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutine_version"
 
     //coroutine ext
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-rc01"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-rc01"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0-rc01"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-rc02"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-rc02"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0-rc02"
 
     //UI
     implementation 'androidx.appcompat:appcompat:1.1.0'

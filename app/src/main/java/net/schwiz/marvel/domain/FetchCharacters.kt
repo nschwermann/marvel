@@ -2,6 +2,7 @@ package net.schwiz.marvel.domain
 
 import androidx.paging.PagedList
 import arrow.core.Either
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import net.schwiz.marvel.core.Action
 import net.schwiz.marvel.core.Result
@@ -11,7 +12,7 @@ import net.schwiz.marvel.data.vo.Character
 import net.schwiz.marvel.util.CoroutineDispatchers
 import org.koin.core.inject
 
-class FetchCharactersUseCase : UseCase<CharacterListActions, CharacterListResults>(){
+class FetchCharactersUseCase(val scope : CoroutineScope) : UseCase<CharacterListActions, CharacterListResults>(){
 
     private val marvelRepo : MarvelRepo by inject()
     private val dispatchers : CoroutineDispatchers by inject()

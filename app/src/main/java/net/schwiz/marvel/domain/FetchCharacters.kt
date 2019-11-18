@@ -4,6 +4,7 @@ import androidx.paging.PagedList
 import arrow.core.Either
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import net.schwiz.marvel.core.Action
 import net.schwiz.marvel.core.Result
 import net.schwiz.marvel.core.UseCase
@@ -18,26 +19,28 @@ class FetchCharactersUseCase(val scope : CoroutineScope) : UseCase<CharacterList
     private val dispatchers : CoroutineDispatchers by inject()
 
     override fun transformActions(actions: Flow<CharacterListActions>): Flow<CharacterListResults> {
-        return flow{
+        return channelFlow{
             actions.collect { action ->
                 when(action){
                     is CharacterListActions.FetchCharacters -> {
-                        emit(CharacterListResults.FetchingCharacters)
-                        marvelRepo.getCharacters(action.nameStartsWith)
-                            .onEach {
-                                emit(CharacterListResults.FetchComplete(it))
-                            }
+                        send(CharacterListResults.FetchingCharacters)
+                        launch {
+                            marvelRepo.getCharacters(action.nameStartsWith)
+                                .onEach {
+                                    send(CharacterListResults.FetchComplete(it))
+                                }
+                                .flowOn(dispatchers.io)
+                                .collect()
+                        }
                     }
                 }
             }
         }
-        .flowOn(dispatchers.io)
         .catch {
             emit(CharacterListResults.FetchComplete(Either.left(DomainError.UnknownError(cause = it))))
         }
     }
 }
-
 
 sealed class CharacterListActions : Action {
     data class FetchCharacters(val nameStartsWith : String?) : CharacterListActions()

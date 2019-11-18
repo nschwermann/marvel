@@ -19,15 +19,15 @@ fun loadImage(view : ImageView, image : Image?, size : String) {
             else -> AppCompatResources.getDrawable(view.context, R.drawable.ic_hero4)
         }
     }
-    if(image != null){
+    if(image == null || image.path.contains("image_not_available", ignoreCase = false)){
+        view.load(randomImage){
+            crossfade(true)
+        }
+    } else {
         view.load("${image.path}/${size}.${image.extension}"){
             crossfade(true)
             placeholder(randomImage)
             error(randomImage)
-        }
-    } else {
-        view.load(randomImage){
-            crossfade(true)
         }
     }
 }

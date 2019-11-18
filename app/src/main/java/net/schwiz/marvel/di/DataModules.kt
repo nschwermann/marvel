@@ -3,6 +3,7 @@ package net.schwiz.marvel.di
 import androidx.room.Room
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
 import net.schwiz.marvel.data.api.AuthInterceptor
 import net.schwiz.marvel.data.api.MarvelService
 import net.schwiz.marvel.data.db.MarvelDatabase
@@ -19,7 +20,7 @@ import timber.log.Timber
 val dataModule = module {
 
     single {
-        Room.inMemoryDatabaseBuilder(get(), MarvelDatabase::class.java).build()
+        Room.databaseBuilder(get(), MarvelDatabase::class.java, "marveldb").build()
     }
 
     single {
@@ -29,7 +30,7 @@ val dataModule = module {
     single {
         Retrofit.Builder()
             .baseUrl(MarvelService.END_POINT)
-            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            .addConverterFactory(Json(JsonConfiguration(strictMode = false)).asConverterFactory("application/json".toMediaType()))
             .client(get())
             .build()
             .create(MarvelService::class.java)

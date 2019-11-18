@@ -15,7 +15,7 @@ interface MarvelService {
 
     @GET("characters?orderBy=name")
     suspend fun characters(
-        @Query(value = "ldimit") limit : Int,
+        @Query(value = "limit") limit : Int,
         @Query(value = "offset") offset : Int,
         @Query(value ="nameStartsWith", encoded = true) name : String? = null) : Response<Result<Character>>
 
